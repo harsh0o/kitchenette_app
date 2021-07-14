@@ -91,15 +91,7 @@
                     app:layout_constraintStart_toStartOf="@+id/textView5"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="54dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="32dp"
-                    android:src="@drawable/profile"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView4" />
+
 
                 <EditText
                     android:id="@+id/editTextTextPersonName"
@@ -162,6 +154,31 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
+                <LinearLayout
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="0.2"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/citytxt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView4">
+
+                    <ImageView
+                        android:id="@+id/logimg"
+                        android:layout_width="54dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/profile"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textView4"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                </LinearLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
@@ -196,14 +213,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/imageView5s"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/home" />
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/textView11s"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Home"

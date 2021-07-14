@@ -14,6 +14,7 @@ import com.example.Adapter.PopularAdapter;
 import com.example.Domain.CategoryDomain;
 import com.example.Domain.FoodDomain;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,18 @@ public class home extends AppCompatActivity {
         recyclerViewCategory();
         recyclerViewPopular();
         bottomNavigation();
+
+
+        LinearLayout logout = findViewById(R.id.logoutBtn);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(),login.class));
+                finish();
+            }
+        });
     }
 
 
