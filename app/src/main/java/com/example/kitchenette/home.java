@@ -3,9 +3,15 @@ package com.example.kitchenette;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,12 +19,23 @@ import com.example.Adapter.CategoryAdapter;
 import com.example.Adapter.PopularAdapter;
 import com.example.Domain.CategoryDomain;
 import com.example.Domain.FoodDomain;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class home extends AppCompatActivity {
+
+    TextView verifyMsg;
+    Button verifyEmailBtn;
+    FirebaseAuth auth;
+
+    //nav_bar variables
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
 
     private RecyclerView.Adapter adapter,adapter2;
     private RecyclerView recyclerViewCategoryList,recyclerViewPopularList;
@@ -27,9 +44,47 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        /*---------------navBar------------*/
+        drawerLayout =findViewById(R.id.drawer_layout);
+        navigationView =findViewById(R.id.nav_view);
+        toolbar =findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+
+        /*---------------End navBar------------*/
+
+        auth = FirebaseAuth.getInstance();
+
         recyclerViewCategory();
         recyclerViewPopular();
         bottomNavigation();
+
+        verifyMsg = findViewById(R.id.verifyEmailMsg);
+        verifyEmailBtn = findViewById(R.id.verifyEmailBtn);
+
+        if(!auth.getCurrentUser().isEmailVerified()){
+            verifyEmailBtn.setVisibility(View.VISIBLE);
+            verifyMsg.setVisibility(View.VISIBLE);
+        }
+
+        verifyEmailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(home.this,"Verification Email Sent",Toast.LENGTH_SHORT).show();
+                        verifyEmailBtn.setVisibility(View.GONE);
+                        verifyMsg.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
 
 
         LinearLayout logout = findViewById(R.id.logoutBtn);
@@ -43,6 +98,8 @@ public class home extends AppCompatActivity {
             }
         });
     }
+
+
 
 
     private void bottomNavigation() {
