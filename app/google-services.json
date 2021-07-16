@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "270658640178",
+    "firebase_url": "https://kitchenette-f4c0d-default-rtdb.firebaseio.com",
+    "project_id": "kitchenette-f4c0d",
+    "storage_bucket": "kitchenette-f4c0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270658640178:android:3f0445a3949bfef75e9f2b",
+        "android_client_info": {
+          "package_name": "com.example.kitchenette"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270658640178-e3th4majinav6hetdoinnbptcra7b9r8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6m65TgSbEgxYKlvZ5gu7n6_7iIF0FOqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270658640178-e3th4majinav6hetdoinnbptcra7b9r8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

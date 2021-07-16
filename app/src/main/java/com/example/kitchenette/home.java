@@ -2,15 +2,18 @@ package com.example.kitchenette;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-public class home extends AppCompatActivity {
+public class home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView verifyMsg;
     Button verifyEmailBtn;
@@ -45,18 +48,25 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         /*---------------navBar------------*/
+
         drawerLayout =findViewById(R.id.drawer_layout);
         navigationView =findViewById(R.id.nav_view);
         toolbar =findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
+        navigationView.bringToFront();
         ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setCheckedItem(R.id.nav_home);
+
 
         /*---------------End navBar------------*/
+
 
         auth = FirebaseAuth.getInstance();
 
@@ -86,22 +96,45 @@ public class home extends AppCompatActivity {
             }
         });
 
+    }
+    /*---------------s call item navBar------------*/
 
-        LinearLayout logout = findViewById(R.id.logoutBtn);
+    @Override
+    public void onBackPressed(){
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.nav_home:
+                break;
+            case R.id.nav_chgPass:
+                Intent intent =new Intent(home.this,resetPassword.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_logout:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getApplicationContext(),login.class));
-                finish();
-            }
-        });
+                break;
+        }
+
+        drawerLayout.closeDrawer((GravityCompat.START));
+        return true;
     }
 
 
 
+    /*---------------e call item navBar------------*/
 
+
+
+    /*---------------s call bottom navBar------------*/
     private void bottomNavigation() {
         FloatingActionButton floatingActionButton = findViewById(R.id.card_btn);
 
@@ -110,6 +143,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(home.this, CartListActivity.class));
+                finish();
             }
         });
 
@@ -118,9 +152,12 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(home.this, home.class));
+                finish();
             }
         });
+
     }
+    /*---------------e call bottom navBar------------*/
 
     private void recyclerViewPopular() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -151,5 +188,7 @@ public class home extends AppCompatActivity {
         adapter = new CategoryAdapter(categoryList);
         recyclerViewCategoryList.setAdapter(adapter);
     }
+
+
 
 }
