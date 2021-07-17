@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class register extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class register extends AppCompatActivity {
     EditText email,full_name,password,phone,passwordConfirm;
     Button regBtn;
     FirebaseAuth fAuth;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +80,15 @@ public class register extends AppCompatActivity {
 
                 Toast.makeText(register.this,"You are Successfully Register",Toast.LENGTH_SHORT).show();
 
+                //firebase register
                 fAuth.createUserWithEmailAndPassword(regemail,regpass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+
+                        //insert user data into firebase
+
+
+
                         startActivity(new Intent(getApplicationContext(),login.class));
                         finish();
                     }

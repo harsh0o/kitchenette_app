@@ -1,16 +1,20 @@
 package com.example.kitchenette;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -22,10 +26,12 @@ import com.example.Adapter.CategoryAdapter;
 import com.example.Adapter.PopularAdapter;
 import com.example.Domain.CategoryDomain;
 import com.example.Domain.FoodDomain;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -33,6 +39,8 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
 
     TextView verifyMsg;
     Button verifyEmailBtn;
+    AlertDialog.Builder reset_alert,delete_alert;
+    LayoutInflater inflater;
     FirebaseAuth auth;
 
     //nav_bar variables
@@ -73,6 +81,10 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
         recyclerViewCategory();
         recyclerViewPopular();
         bottomNavigation();
+
+        reset_alert = new AlertDialog.Builder(this);
+        delete_alert = new AlertDialog.Builder(this);
+        inflater = this.getLayoutInflater();
 
         verifyMsg = findViewById(R.id.verifyEmailMsg);
         verifyEmailBtn = findViewById(R.id.verifyEmailBtn);
@@ -118,6 +130,78 @@ public class home extends AppCompatActivity implements NavigationView.OnNavigati
                 Intent intent =new Intent(home.this,resetPassword.class);
                 startActivity(intent);
                 break;
+
+            case R.id.nav_menu:
+                Intent intent1 =new Intent(home.this,product.class);
+                startActivity(intent1);
+                break;
+
+            case R.id.nav_updateEmail:
+
+                View view = inflater.inflate(R.layout.reset_pop, null);
+
+                reset_alert.setTitle("Update Email?")
+                        .setMessage("Enter your new Email Address")
+                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //validate the email address
+                                EditText email = view.findViewById(R.id.reset_email_pop);
+                                if(email.getText().toString().isEmpty()){
+                                    email.setError("Required Field");
+                                    return;
+                                }
+                                //send the reset link
+
+                                FirebaseUser user = auth.getCurrentUser();
+                                user.updateEmail(email.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+
+                                        Toast.makeText(home.this,"Email updated",Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                        Toast.makeText(home.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                        }).setNegativeButton("Cancel", null)
+                        .setView(view)
+                        .create().show();
+                break;
+
+
+            case R.id.nav_deleteAccount:
+                delete_alert.setTitle("Delete Account Permanently ?")
+                        .setMessage("Are you sure ?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                FirebaseUser user = auth.getCurrentUser();
+                                user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(home.this,"Account Deleted.",Toast.LENGTH_SHORT).show();
+                                        auth.signOut();
+                                        startActivity(new Intent(getApplicationContext(),login.class));
+                                        finish();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(home.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }).setNegativeButton("Cancel",null)
+                        .create().show();
+                break;
+
             case R.id.nav_logout:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getApplicationContext(),login.class));

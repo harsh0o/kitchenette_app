@@ -10,6 +10,15 @@
 
     </group>
 
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/menulist"
+            android:title="Menu" />
+
+    </group>
+
 
 
 
@@ -22,6 +31,24 @@
                     android:id="@+id/nav_chgPass"
                     android:icon="@drawable/chg_pass"
                     android:title="Change Password" />
+
+            </group>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_updateEmail"
+                    android:icon="@drawable/update_email"
+                    android:title="Update Email" />
+
+            </group>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_deleteAccount"
+                    android:icon="@drawable/delete"
+                    android:title="Delete Account" />
 
             </group>
 
