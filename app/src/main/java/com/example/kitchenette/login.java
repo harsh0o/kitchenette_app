@@ -41,7 +41,7 @@ public class  login extends AppCompatActivity {
         inflater = this.getLayoutInflater();
 
 
-        //register btn
+        //reset Btn
         button = findViewById(R.id.register);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +75,6 @@ public class  login extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-
                         //login successfull
 
                         String uid = authResult.getUser().getUid();
