@@ -87,6 +87,15 @@ public class register extends AppCompatActivity {
 
                         //insert user data into firebase
 
+                        String uid = authResult.getUser().getUid();
+
+
+                        Users user = new Users(uid,full_name.getText().toString(),email.getText().toString(),phone.getText().toString(),password.getText().toString(),0);
+
+
+
+                        firebaseDatabase.getReference().child("Users").child(uid).setValue(user);
+
 
 
                         startActivity(new Intent(getApplicationContext(),login.class));

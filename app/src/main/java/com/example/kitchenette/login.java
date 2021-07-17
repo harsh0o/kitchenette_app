@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class  login extends AppCompatActivity {
 
@@ -37,6 +41,7 @@ public class  login extends AppCompatActivity {
         inflater = this.getLayoutInflater();
 
 
+        //register btn
         button = findViewById(R.id.register);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,9 +75,35 @@ public class  login extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+
                         //login successfull
-                        startActivity(new Intent(getApplicationContext(),home.class));
-                        finish();
+
+                        String uid = authResult.getUser().getUid();
+
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        firebaseDatabase.getReference().child("Users").child(uid).child("role").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                int role = snapshot.getValue(Integer.class);
+                                if(role==0){
+                                    startActivity(new Intent(getApplicationContext(),home.class));
+                                    finish();
+                                }
+                                if(role==1){
+                                    startActivity(new Intent(getApplicationContext(),SellerDashboard.class));
+                                    finish();
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

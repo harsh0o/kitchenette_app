@@ -11,12 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kitchenette">
+        <activity android:name=".SellerDashboard"></activity>
         <activity android:name=".resetPassword" />
-        <activity android:name=".product" >
-
-
-
-        </activity>
+        <activity android:name=".product"></activity>
         <activity android:name=".CartListActivity" />
         <activity android:name=".ShowDetailActivity" />
         <activity android:name=".home" />
